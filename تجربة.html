@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024">
+    <title>مدير الإشارات المرجعية المحمي | Meta Edition</title>
+    <style>
+        :root {
+            --meta-blue: #0866ff;
+            --meta-bg: #f0f2f5;
+            --meta-card-bg: #ffffff;
+            --text-primary: #050505;
+            --text-secondary: #65676b;
+            --border-color: #ccd0d5;
+            --btn-bg: #e4e6eb;
+            --btn-hover: #d8dadf;
+        }
+
+        body.dark-mode {
+            --meta-bg: #18191a;
+            --meta-card-bg: #242526;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --border-color: #3e4042;
+            --btn-bg: #3a3b3c;
+            --btn-hover: #4e4f50;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--meta-bg);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+            min-width: 1024px; 
+            overflow-x: auto;
+        }
+
+        #loginScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--meta-bg);
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: var(--meta-card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px; 
+        }
+
+        .login-box h2 { color: var(--meta-blue); margin-bottom: 20px; }
+        .login-box input {
+            width: 90%; margin-bottom: 15px; text-align: center; letter-spacing: 2px;
+            background-color: var(--meta-bg); color: var(--text-primary);
+            border: 1px solid var(--border-color); padding: 12px; border-radius: 6px; outline: none;
+            box-sizing: border-box;
+        }
+
+        .error-msg { color: #ff4d4f; font-size: 0.9rem; margin-bottom: 10px; display: none; }
+
+        #appContainer {
+            display: none; width: 1000px; padding: 30px 20px;
+            flex-direction: column; align-items: center; position: relative;
+        }
+
+        .top-controls {
+            position: absolute; top: 20px; left: 20px;
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+        }
+
+        .icon-btn {
+            background: var(--btn-bg); color: var(--text-primary);
+            border: none; border-radius: 50%; width: 40px; height: 40px;
+            font-size: 1.2rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; transition: 0.3s;
+        }
+        .icon-btn:hover { background: var(--btn-hover); }
+
+        .control-btn {
+            border: none; border-radius: 20px; padding: 8px 15px; font-weight: bold;
+            cursor: pointer; display: flex; align-items: center; gap: 5px;
+            transition: 0.3s; font-size: 0.9rem; color: white;
+        }
+        .btn-folder { background: var(--meta-blue); }
+        .btn-folder:hover { background: #0054d1; }
+        .btn-export { background: #28a745; }
+        .btn-export:hover { background: #218838; }
+        .btn-import { background: #17a2b8; }
+        .btn-import:hover { background: #138496; }
+        .btn-clear { background: #dc3545; }
+        .btn-clear:hover { background: #c82333; }
+
+        .header { text-align: center; margin-bottom: 30px; width: 100%; margin-top: 40px; }
+        .header h1 { color: var(--meta-blue); margin-bottom: 5px; }
+        .header p { color: var(--text-secondary); }
+        
+        .card {
+            background: var(--meta-card-bg); border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); padding: 25px;
+            margin-bottom: 20px; width: 100%; box-sizing: border-box;
+            transition: background-color 0.3s;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
+        
+        input[type="text"], input[type="url"], select {
+            padding: 12px; border: 1px solid var(--border-color); border-radius: 6px;
+            font-size: 1rem; outline: none; background-color: var(--meta-bg);
+            color: var(--text-primary); transition: 0.3s; box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="url"]:focus, select:focus { border-color: var(--meta-blue); }
+
+        .image-inputs-container { display: flex; gap: 10px; align-items: center; }
+        .image-inputs-container input[type="url"] { flex: 1; box-sizing: border-box; }
+        .or-text { color: var(--text-secondary); font-size: 0.9rem; font-weight: bold; }
+        
+        input[type="file"] {
+            font-size: 0.9rem; padding: 8px; background: var(--btn-bg);
+            border-radius: 6px; color: var(--text-primary); cursor: pointer;
+            border: 1px solid var(--border-color); width: 100%; box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%; background-color: var(--meta-blue); color: white;
+            border: none; padding: 14px; font-size: 1.1rem; font-weight: bold;
+            border-radius: 6px; cursor: pointer; transition: 0.2s;
+        }
+        .submit-btn.edit-mode { background-color: #28a745; }
+
+        .grid-header {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;
+        }
+        .breadcrumb { display: flex; align-items: center; gap: 15px; font-size: 1.2rem; font-weight: bold; }
+        
+        .back-btn-huge {
+            background: var(--meta-blue); color: white; border: none;
+            padding: 8px 25px; border-radius: 30px; cursor: pointer;
+            font-weight: bold; font-size: 1.1rem; display: flex;
+            align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(8, 102, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .back-btn-huge:hover {
+            background: #0054d1; transform: translateX(5px);
+            box-shadow: 0 6px 10px rgba(8, 102, 255, 0.3);
+        }
+
+        .bookmarks-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 20px; width: 100%;
+        }
+
+        .bookmark-item {
+            background: var(--meta-card-bg); border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); padding: 20px;
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            transition: transform 0.2s;
+        }
+        .bookmark-item:hover { transform: translateY(-3px); }
+
+        .folder-item { border: 2px dashed var(--meta-blue); cursor: pointer; }
+
+        .bookmark-actions {
+            position: absolute; top: 10px; right: 10px; left: 10px;
+            display: flex; justify-content: space-between;
+        }
+
+        .action-btn {
+            background: var(--btn-bg); color: var(--text-primary);
+            border: none; border-radius: 5px; padding: 5px 10px;
+            font-size: 0.85rem; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .action-btn.edit:hover { background: #e6a23c; color: white; }
+        .action-btn.remove:hover { background: #ff4d4f; color: white; }
+
+        .bookmark-img {
+            width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
+            margin: 15px 0; border: 1px solid var(--border-color); display: flex;
+            align-items: center; justify-content: center; background-color: var(--btn-bg);
+            font-size: 2rem; color: var(--meta-blue); font-weight: bold;
+        }
+
+        .bookmark-title { font-weight: 700; margin-bottom: 15px; font-size: 1.1rem; text-align: center; }
+        .bookmark-link {
+            width: 100%; text-align: center; background-color: var(--btn-bg);
+            color: var(--text-primary); text-decoration: none; padding: 10px;
+            border-radius: 6px; font-weight: 600; box-sizing: border-box; margin-top: auto;
+        }
+        .bookmark-link:hover { background-color: var(--btn-hover); }
+    </style>
+</head>
+<body>
+
+<div id="loginScreen">
+    <div class="login-box">
+        <h2>تسجيل الدخول</h2>
+        <input type="password" id="passwordInput" placeholder="كلمة المرور..." onkeypress="handleEnter(event)">
+        <div id="errorMsg" class="error-msg">كلمة المرور غير صحيحة!</div>
+        <button class="submit-btn" onclick="checkPassword()">دخول</button>
+    </div>
+</div>
+
+<div id="appContainer">
+    <div class="top-controls">
+        <button class="icon-btn theme-toggle" onclick="toggleTheme()" title="تغيير المظهر">🌙</button>
+        <button class="control-btn btn-folder" onclick="createNewFolder()">➕ فولدر جديد</button>
+        
+        <input type="file" id="importFile" accept=".html,.json" style="display: none;" multiple onchange="importData(event)">
+        <button class="control-btn btn-import" onclick="document.getElementById('importFile').click()">📤 استيراد ملفات</button>
+        
+        <button class="control-btn btn-export" onclick="exportData()">📥 تصدير</button>
+        <button class="control-btn btn-clear" onclick="clearAllData()">🗑️ مسح الكل</button>
+    </div>
+
+    <div class="header">
+        <h1>Meta Bookmarks</h1>
+        <p>نظام إدارة مفضلة متكامل (Batch Support)</p>
+    </div>
+
+    <div class="card">
+        <form id="bookmarkForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>اسم الموقع *</label>
+                    <input type="text" id="siteName" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>الرابط (URL) *</label>
+                    <input type="url" id="siteUrl" required autocomplete="off">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>حفظ في فولدر:</label>
+                    <select id="folderSelect">
+                        <option value="root">-- الشاشة الرئيسية --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>اللوجو (رابط أو من الجهاز)</label>
+                    <div class="image-inputs-container">
+                        <input type="url" id="siteImgUrl" placeholder="رابط الصورة..." autocomplete="off">
+                        <span class="or-text">أو</span>
+                        <input type="file" id="siteImgFile" accept="image/*">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" id="submitBtn" class="submit-btn">إضافة الموقع</button>
+        </form>
+    </div>
+
+    <div class="grid-header" id="gridHeader"></div>
+    <div class="bookmarks-grid" id="bookmarksContainer"></div>
+</div>
+
+<script>
+    let appState = {
+        folders: [],
+        bookmarks: [],
+        currentFolderId: 'root',
+        editId: null
+    };
+
+    let uploadedFileBase64 = "";
+
+    function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
+
+    function initData() {
+        const savedData = localStorage.getItem('meta_app_data');
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            appState.folders = parsed.folders || [];
+            appState.bookmarks = parsed.bookmarks || [];
+        }
+    }
+
+    function saveData() {
+        localStorage.setItem('meta_app_data', JSON.stringify({
+            folders: appState.folders,
+            bookmarks: appState.bookmarks
+        }));
+    }
+
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle').innerText = '☀️';
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const themeBtn = document.querySelector('.theme-toggle');
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            themeBtn.innerText = '☀️';
+        } else {
+            localStorage.setItem('theme', 'light');
+            themeBtn.innerText = '🌙';
+        }
+    }
+
+    const correctPassword = "#ZMsd42d*";
+    function checkPassword() {
+        const input = document.getElementById('passwordInput').value;
+        if (input === correctPassword) {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            initData();
+            renderApp(); 
+        } else {
+            document.getElementById('errorMsg').style.display = 'block';
+        }
+    }
+    function handleEnter(e) { if (e.key === 'Enter') checkPassword(); }
+
+    function createNewFolder() {
+        const name = prompt("اكتب اسم الفولدر الجديد:");
+        if (name && name.trim() !== "") {
+            appState.folders.push({
+                id: generateId(),
+                name: name.trim()
+            });
+            saveData();
+            renderApp();
+        }
+    }
+
+    function openFolder(folderId) {
+        appState.currentFolderId = folderId;
+        document.getElementById('folderSelect').value = folderId;
+        renderApp();
+    }
+
+    function deleteFolder(id, event) {
+        event.stopPropagation(); 
+        if (confirm("تحذير: مسح الفولدر هيؤدي لمسح كل المواقع اللي جواه! متأكد؟")) {
+            appState.folders = appState.folders.filter(f => f.id !== id);
+            appState.bookmarks = appState.bookmarks.filter(b => b.folderId !== id);
+            saveData();
+            renderApp();
+        }
+    }
+
+    function renderApp() {
+        const select = document.getElementById('folderSelect');
+        const header = document.getElementById('gridHeader');
+        const grid = document.getElementById('bookmarksContainer');
+
+        select.innerHTML = '<option value="root">-- الشاشة الرئيسية --</option>';
+        appState.folders.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.id;
+            opt.textContent = `📁 ${f.name}`;
+            select.appendChild(opt);
+        });
+        select.value = appState.currentFolderId;
+
+        grid.innerHTML = '';
+
+        if (appState.currentFolderId === 'root') {
+            header.innerHTML = `<div class="breadcrumb">🏠 الشاشة الرئيسية</div>`;
+            appState.folders.forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'bookmark-item folder-item';
+                div.onclick = () => openFolder(f.id);
+                div.innerHTML = `
+                    <div class="bookmark-actions">
+                        <button class="action-btn remove" onclick="deleteFolder('${f.id}', event)">حذف</button>
+                    </div>
+                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
+                    <div class="bookmark-title">${f.name}</div>
+                `;
+                grid.appendChild(div);
+            });
+        } else {
+            const currentFolder = appState.folders.find(f => f.id === appState.currentFolderId);
+            header.innerHTML = `
+                <div class="breadcrumb">
+                    <button class="back-btn-huge" onclick="openFolder('root')" title="الرجوع">
+                        <span>🔙</span> رجوع
+                    </button>
+                    <span style="color: var(--text-secondary);">/ 📂 ${currentFolder ? currentFolder.name : ''}</span>
+                </div>
+            `;
+        }
+
+        const visibleBookmarks = appState.bookmarks.filter(b => b.folderId === appState.currentFolderId);
+        visibleBookmarks.forEach(b => {
+            const bookmarkEl = document.createElement('div');
+            bookmarkEl.className = 'bookmark-item';
+            let imageHTML = (b.img && b.img.trim() !== '') 
+                ? `<img src="${b.img}" alt="${b.name}" class="bookmark-img" onerror="this.outerHTML='<div class=\\'bookmark-img\\'>${b.name.charAt(0).toUpperCase()}</div>'">`
+                : `<div class="bookmark-img">${b.name.charAt(0).toUpperCase()}</div>`;
+            bookmarkEl.innerHTML = `
+                <div class="bookmark-actions">
+                    <button class="action-btn edit" onclick="editBookmark('${b.id}')">تعديل</button>
+                    <button class="action-btn remove" onclick="deleteBookmark('${b.id}')">حذف</button>
+                </div>
+                ${imageHTML}
+                <div class="bookmark-title">${b.name}</div>
+                <a href="${b.url}" target="_blank" class="bookmark-link">زيارة الموقع</a>
+            `;
+            grid.appendChild(bookmarkEl);
+        });
+    }
+
+    const form = document.getElementById('bookmarkForm');
+    const siteNameInput = document.getElementById('siteName');
+    const siteUrlInput = document.getElementById('siteUrl');
+    const siteImgUrlInput = document.getElementById('siteImgUrl');
+    const siteImgFileInput = document.getElementById('siteImgFile');
+    const folderSelect = document.getElementById('folderSelect');
+    const submitBtn = document.getElementById('submitBtn');
+
+    siteImgFileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) { uploadedFileBase64 = event.target.result; };
+            reader.readAsDataURL(file);
+        } else {
+            uploadedFileBase64 = "";
+        }
+    });
+
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        let finalImageUrl = siteImgUrlInput.value;
+        if (uploadedFileBase64 !== "") {
+            finalImageUrl = uploadedFileBase64;
+        } else if (appState.editId !== null && finalImageUrl === "" && siteImgFileInput.files.length === 0) {
+            const oldBookmark = appState.bookmarks.find(b => b.id === appState.editId);
+            if (oldBookmark && oldBookmark.img && oldBookmark.img.startsWith('data:image')) {
+                finalImageUrl = oldBookmark.img;
+            }
+        }
+
+        if (appState.editId === null) {
+            appState.bookmarks.push({
+                id: generateId(), name: siteNameInput.value, url: siteUrlInput.value,
+                img: finalImageUrl, folderId: folderSelect.value
+            });
+        } else {
+            const index = appState.bookmarks.findIndex(b => b.id === appState.editId);
+            if (index !== -1) {
+                appState.bookmarks[index].name = siteNameInput.value;
+                appState.bookmarks[index].url = siteUrlInput.value;
+                appState.bookmarks[index].img = finalImageUrl;
+                appState.bookmarks[index].folderId = folderSelect.value;
+            }
+            appState.editId = null;
+            submitBtn.innerText = "إضافة الموقع";
+            submitBtn.classList.remove('edit-mode');
+        }
+        saveData(); form.reset(); uploadedFileBase64 = ""; renderApp();
+    }
+
+    function editBookmark(id) {
+        const bookmark = appState.bookmarks.find(b => b.id === id);
+        if (!bookmark) return;
+        siteNameInput.value = bookmark.name; siteUrlInput.value = bookmark.url;
+        folderSelect.value = bookmark.folderId;
+        if (bookmark.img && bookmark.img.startsWith('data:image')) {
+            siteImgUrlInput.value = ''; siteImgUrlInput.placeholder = '(مرفوعة من الجهاز)';
+        } else {
+            siteImgUrlInput.value = bookmark.img || ''; siteImgUrlInput.placeholder = "رابط الصورة...";
+        }
+        siteImgFileInput.value = ''; uploadedFileBase64 = "";
+        appState.editId = id; submitBtn.innerText = "حفظ التعديلات";
+        submitBtn.classList.add('edit-mode'); window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteBookmark(id) {
+        appState.bookmarks = appState.bookmarks.filter(b => b.id !== id);
+        saveData(); renderApp();
+    }
+
+    form.addEventListener('submit', handleFormSubmit);
+
+    function exportData() {
+        const dataStr = JSON.stringify({ folders: appState.folders, bookmarks: appState.bookmarks });
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'meta_bookmarks_backup.json';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    // --- دالة الاستيراد الجماعي المطورة (Batch Import) ---
+    async function importData(event) {
+        const files = Array.from(event.target.files);
+        if (files.length === 0) return;
+
+        let totalAddedFolders = 0;
+        let totalAddedBookmarks = 0;
+
+        // بنلف على كل الملفات المرفوعة ونعالجها واحد واحد
+        for (const file of files) {
+            const content = await readFileAsync(file);
+            
+            if (file.name.endsWith('.json')) {
+                try {
+                    const parsed = JSON.parse(content);
+                    // دمج الفولدرات والمواقع من ملف الـ JSON مع الداتا الحالية
+                    if (parsed.folders && parsed.bookmarks) {
+                        appState.folders = [...appState.folders, ...parsed.folders];
+                        appState.bookmarks = [...appState.bookmarks, ...parsed.bookmarks];
+                        // عمل Deduplication سريع للـ IDs عشان لو استورد نفس الملف مرتين
+                        appState.folders = Array.from(new Map(appState.folders.map(item => [item.id, item])).values());
+                        appState.bookmarks = Array.from(new Map(appState.bookmarks.map(item => [item.id, item])).values());
+                    }
+                } catch(e) { console.error("Error parsing JSON file", file.name); }
+            } 
+            else if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
+                const results = processHTMLContent(content);
+                totalAddedFolders += results.folders;
+                totalAddedBookmarks += results.bookmarks;
+            }
+        }
+
+        saveData();
+        renderApp();
+        alert(`تم دمج بيانات ${files.length} ملف بنجاح!`);
+        event.target.value = ''; 
+    }
+
+    // دالة مساعدة لقراءة الملفات باستخدام الـ Promises (عشان نستخدم await)
+    function readFileAsync(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsText(file);
+        });
+    }
+
+    // دالة معالجة محتوى الـ HTML المستخرج من المتصفحات
+    function processHTMLContent(html) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const rootDl = doc.querySelector('dl');
+        if (!rootDl) return { folders: 0, bookmarks: 0 };
+
+        let fCount = 0; let bCount = 0;
+
+        function processDL(dlElement, currentFolderId, level = 0) {
+            const children = dlElement.children;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                if (child.tagName === 'DT') {
+                    const a = Array.from(child.children).find(el => el.tagName === 'A');
+                    const h3 = Array.from(child.children).find(el => el.tagName === 'H3');
+                    const dl = Array.from(child.children).find(el => el.tagName === 'DL');
+                    
+                    if (a) {
+                        const url = a.href;
+                        if (!appState.bookmarks.some(b => b.url === url) && url.startsWith('http')) {
+                            appState.bookmarks.push({
+                                id: generateId(), name: a.textContent.trim(),
+                                url: url, img: a.getAttribute('icon') || '', folderId: currentFolderId
+                            });
+                            bCount++;
+                        }
+                    }
+                    if (h3 && dl) {
+                        if (level === 0) { processDL(dl, currentFolderId, level + 1); } 
+                        else {
+                            const fName = h3.textContent.trim();
+                            let targetId = generateId();
+                            let existing = appState.folders.find(f => f.name === fName);
+                            if (existing) { targetId = existing.id; } 
+                            else {
+                                appState.folders.push({ id: targetId, name: fName });
+                                fCount++;
+                            }
+                            processDL(dl, targetId, level + 1);
+                        }
+                    }
+                } else if (child.tagName === 'DL') { processDL(child, currentFolderId, level); }
+            }
+        }
+
+        processDL(rootDl, appState.currentFolderId, 0);
+        return { folders: fCount, bookmarks: bCount };
+    }
+
+    function clearAllData() {
+        if (confirm("تحذير: سيتم مسح كل شيء! موافق؟")) {
+            appState.folders = []; appState.bookmarks = [];
+            appState.currentFolderId = 'root'; saveData(); renderApp();
+        }
+    }
+</script>
+</body>
+</html>
