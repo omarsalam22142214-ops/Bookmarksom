@@ -96,6 +96,8 @@
         .btn-folder:hover { background: #0054d1; }
         .btn-export { background: #28a745; }
         .btn-export:hover { background: #218838; }
+        .btn-export-html { background: #e6a23c; color: #000; }
+        .btn-export-html:hover { background: #cf9236; }
         .btn-import { background: #17a2b8; }
         .btn-import:hover { background: #138496; }
         .btn-clear { background: #dc3545; }
@@ -105,6 +107,14 @@
         .header h1 { color: var(--meta-blue); margin-bottom: 5px; }
         .header p { color: var(--text-secondary); }
         
+        #searchInput {
+            width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 8px;
+            border: 2px solid var(--border-color); background: var(--meta-card-bg);
+            color: var(--text-primary); font-size: 1.05rem; box-sizing: border-box;
+            outline: none; transition: 0.3s;
+        }
+        #searchInput:focus { border-color: var(--meta-blue); }
+
         .card {
             background: var(--meta-card-bg); border-radius: 8px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); padding: 25px;
@@ -200,8 +210,10 @@
             border-radius: 6px; font-weight: 600; box-sizing: border-box; margin-top: auto;
         }
         .bookmark-link:hover { background-color: var(--btn-hover); }
+        
+        :is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}
     </style>
-<style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style></head>
+</head>
 <body class="dark-mode">
 
 <div id="loginScreen" style="display: none;">
@@ -221,14 +233,18 @@
         <input type="file" id="importFile" accept=".html,.json" style="display: none;" multiple="" onchange="importData(event)">
         <button class="control-btn btn-import" onclick="document.getElementById('importFile').click()">📤 استيراد ملفات</button>
         
-        <button class="control-btn btn-export" onclick="exportData()">📥 تصدير</button>
+        <button class="control-btn btn-export" onclick="exportData()">📥 نسخة (JSON)</button>
+        <button class="control-btn btn-export-html" onclick="exportAsBrowserHTML()">🌍 تصدير للمتصفح (HTML)</button>
         <button class="control-btn btn-clear" onclick="clearAllData()">🗑️ مسح الكل</button>
     </div>
 
     <div class="header">
-        <h1> MY  Bookmarks</h1>
+        <h1>MY Bookmarks</h1>
         
-    </div><input type="text" id="searchInput" placeholder="ابحث عن موقع..." onkeyup="searchBookmarks()" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--meta-card-bg); color: var(--text-primary);" data-ddg-inputtype="unknown">
+    </div>
+
+    <!-- مربع البحث -->
+    <input type="text" id="searchInput" placeholder="🔍 ابحث عن موقع أو فولدر باسمه أو بالرابط..." onkeyup="searchBookmarks()">
 
     <div class="card">
         <form id="bookmarkForm">
@@ -265,20 +281,6 @@
 </div>
 
 <script>
-    function searchBookmarks() {
-    let term = document.getElementById('searchInput').value.toLowerCase();
-    let items = document.querySelectorAll('.bookmark-item');
-    
-    items.forEach(item => {
-        let title = item.querySelector('.bookmark-title').innerText.toLowerCase();
-        // لو العنصر فولدر مش هنخفيه في البحث حالياً أو ممكن تعدلها حسب رغبتك
-        if (item.classList.contains('folder-item')) {
-            item.style.display = term === "" ? "flex" : "none";
-            return;
-        }
-        item.style.display = title.includes(term) ? "flex" : "none";
-    });
-}
     let appState = {
         folders: [],
         bookmarks: [],
@@ -368,7 +370,35 @@
         }
     }
 
+    // دالة البحث الجديدة
+    function searchBookmarks() {
+        let term = document.getElementById('searchInput').value.toLowerCase();
+        let items = document.querySelectorAll('.bookmark-item');
+        
+        items.forEach(item => {
+            let title = item.querySelector('.bookmark-title') ? item.querySelector('.bookmark-title').innerText.toLowerCase() : '';
+            let linkEl = item.querySelector('.bookmark-link');
+            let link = linkEl ? linkEl.href.toLowerCase() : '';
+            
+            // لو فولدر بيبحث بالاسم بس
+            if (item.classList.contains('folder-item')) {
+                item.style.display = title.includes(term) ? "flex" : "none";
+                return;
+            }
+            
+            // لو موقع بيبحث في الاسم والرابط
+            if (title.includes(term) || link.includes(term)) {
+                item.style.display = "flex";
+            } else {
+                item.style.display = "none";
+            }
+        });
+    }
+
     function renderApp() {
+        // تفريغ مربع البحث عند تغيير الفولدر عشان ما يحصلش تعارض
+        document.getElementById('searchInput').value = '';
+
         const select = document.getElementById('folderSelect');
         const header = document.getElementById('gridHeader');
         const grid = document.getElementById('bookmarksContainer');
@@ -504,6 +534,7 @@
 
     form.addEventListener('submit', handleFormSubmit);
 
+    // دالة تصدير الداتا كملف JSON (النسخة الاحتياطية الخاصة بالأداة)
     function exportData() {
         const dataStr = JSON.stringify({ folders: appState.folders, bookmarks: appState.bookmarks });
         const blob = new Blob([dataStr], { type: 'application/json' });
@@ -514,7 +545,56 @@
         document.body.removeChild(a); URL.revokeObjectURL(url);
     }
 
-    // --- دالة الاستيراد الجماعي المطورة (Batch Import) ---
+    // دالة تصدير الداتا كملف HTML (متوافق مع كل المتصفحات خصوصاً Firefox)
+    function exportAsBrowserHTML() {
+        const timestamp = Math.floor(Date.now() / 1000); 
+        
+        let htmlContent = `<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! -->
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'none'; img-src data: *; object-src 'none'"></meta>
+<TITLE>Bookmarks</TITLE>
+<H1>Bookmarks Menu</H1>
+
+<DL><p>\n`;
+
+        const rootBookmarks = appState.bookmarks.filter(b => b.folderId === 'root');
+        rootBookmarks.forEach(b => {
+            let iconAttr = (b.img && b.img.startsWith('data:image')) ? ` ICON="${b.img}"` : '';
+            htmlContent += `    <DT><A HREF="${b.url}" ADD_DATE="${timestamp}" LAST_MODIFIED="${timestamp}"${iconAttr}>${b.name}</A>\n`;
+        });
+
+        appState.folders.forEach(folder => {
+            htmlContent += `    <DT><H3 ADD_DATE="${timestamp}" LAST_MODIFIED="${timestamp}">${folder.name}</H3>\n    <DL><p>\n`;
+            
+            const folderBookmarks = appState.bookmarks.filter(b => b.folderId === folder.id);
+            folderBookmarks.forEach(b => {
+                let iconAttr = (b.img && b.img.startsWith('data:image')) ? ` ICON="${b.img}"` : '';
+                htmlContent += `        <DT><A HREF="${b.url}" ADD_DATE="${timestamp}" LAST_MODIFIED="${timestamp}"${iconAttr}>${b.name}</A>\n`;
+            });
+            
+            htmlContent += `    </DL><p>\n`;
+        });
+
+        htmlContent += `</DL><p>`;
+
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        
+        const dateStr = new Date().toISOString().slice(0,10);
+        a.href = url;
+        a.download = `Meta_Bookmarks_Pro_${dateStr}.html`;
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
     async function importData(event) {
         const files = Array.from(event.target.files);
         if (files.length === 0) return;
@@ -522,18 +602,15 @@
         let totalAddedFolders = 0;
         let totalAddedBookmarks = 0;
 
-        // بنلف على كل الملفات المرفوعة ونعالجها واحد واحد
         for (const file of files) {
             const content = await readFileAsync(file);
             
             if (file.name.endsWith('.json')) {
                 try {
                     const parsed = JSON.parse(content);
-                    // دمج الفولدرات والمواقع من ملف الـ JSON مع الداتا الحالية
                     if (parsed.folders && parsed.bookmarks) {
                         appState.folders = [...appState.folders, ...parsed.folders];
                         appState.bookmarks = [...appState.bookmarks, ...parsed.bookmarks];
-                        // عمل Deduplication سريع للـ IDs عشان لو استورد نفس الملف مرتين
                         appState.folders = Array.from(new Map(appState.folders.map(item => [item.id, item])).values());
                         appState.bookmarks = Array.from(new Map(appState.bookmarks.map(item => [item.id, item])).values());
                     }
@@ -552,7 +629,6 @@
         event.target.value = ''; 
     }
 
-    // دالة مساعدة لقراءة الملفات باستخدام الـ Promises (عشان نستخدم await)
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -562,7 +638,6 @@
         });
     }
 
-    // دالة معالجة محتوى الـ HTML المستخرج من المتصفحات
     function processHTMLContent(html) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
