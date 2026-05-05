@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
+<html lang="ar" dir="rtl"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1024">
     <title>مدير الإشارات المرجعية المحمي | Meta Edition</title>
@@ -203,24 +201,24 @@
         }
         .bookmark-link:hover { background-color: var(--btn-hover); }
     </style>
-</head>
-<body>
+<style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style></head>
+<body class="dark-mode">
 
-<div id="loginScreen">
+<div id="loginScreen" style="display: none;">
     <div class="login-box">
         <h2>تسجيل الدخول</h2>
-        <input type="password" id="passwordInput" placeholder="كلمة المرور..." onkeypress="handleEnter(event)">
+        <input type="password" id="passwordInput" placeholder="كلمة المرور..." onkeypress="handleEnter(event)" data-ddg-inputtype="credentials.password.current">
         <div id="errorMsg" class="error-msg">كلمة المرور غير صحيحة!</div>
         <button class="submit-btn" onclick="checkPassword()">دخول</button>
     </div>
 </div>
 
-<div id="appContainer">
+<div id="appContainer" style="display: flex;">
     <div class="top-controls">
-        <button class="icon-btn theme-toggle" onclick="toggleTheme()" title="تغيير المظهر">🌙</button>
+        <button class="icon-btn theme-toggle" onclick="toggleTheme()" title="تغيير المظهر">☀️</button>
         <button class="control-btn btn-folder" onclick="createNewFolder()">➕ فولدر جديد</button>
         
-        <input type="file" id="importFile" accept=".html,.json" style="display: none;" multiple onchange="importData(event)">
+        <input type="file" id="importFile" accept=".html,.json" style="display: none;" multiple="" onchange="importData(event)">
         <button class="control-btn btn-import" onclick="document.getElementById('importFile').click()">📤 استيراد ملفات</button>
         
         <button class="control-btn btn-export" onclick="exportData()">📥 تصدير</button>
@@ -228,28 +226,26 @@
     </div>
 
     <div class="header">
-        <h1>Meta Bookmarks</h1>
-        <p>نظام إدارة مفضلة متكامل (Batch Support)</p>
-    </div>
+        <h1> MY  Bookmarks</h1>
+        
+    </div><input type="text" id="searchInput" placeholder="ابحث عن موقع..." onkeyup="searchBookmarks()" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--meta-card-bg); color: var(--text-primary);" data-ddg-inputtype="unknown">
 
     <div class="card">
         <form id="bookmarkForm">
             <div class="form-row">
                 <div class="form-group">
                     <label>اسم الموقع *</label>
-                    <input type="text" id="siteName" required autocomplete="off">
+                    <input type="text" id="siteName" required="" autocomplete="off" data-ddg-inputtype="unknown">
                 </div>
                 <div class="form-group">
                     <label>الرابط (URL) *</label>
-                    <input type="url" id="siteUrl" required autocomplete="off">
+                    <input type="url" id="siteUrl" required="" autocomplete="off">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>حفظ في فولدر:</label>
-                    <select id="folderSelect">
-                        <option value="root">-- الشاشة الرئيسية --</option>
-                    </select>
+                    <select id="folderSelect" data-ddg-inputtype="unknown"><option value="root">-- الشاشة الرئيسية --</option></select>
                 </div>
                 <div class="form-group">
                     <label>اللوجو (رابط أو من الجهاز)</label>
@@ -264,11 +260,25 @@
         </form>
     </div>
 
-    <div class="grid-header" id="gridHeader"></div>
+    <div class="grid-header" id="gridHeader"><div class="breadcrumb">🏠 الشاشة الرئيسية</div></div>
     <div class="bookmarks-grid" id="bookmarksContainer"></div>
 </div>
 
 <script>
+    function searchBookmarks() {
+    let term = document.getElementById('searchInput').value.toLowerCase();
+    let items = document.querySelectorAll('.bookmark-item');
+    
+    items.forEach(item => {
+        let title = item.querySelector('.bookmark-title').innerText.toLowerCase();
+        // لو العنصر فولدر مش هنخفيه في البحث حالياً أو ممكن تعدلها حسب رغبتك
+        if (item.classList.contains('folder-item')) {
+            item.style.display = term === "" ? "flex" : "none";
+            return;
+        }
+        item.style.display = title.includes(term) ? "flex" : "none";
+    });
+}
     let appState = {
         folders: [],
         bookmarks: [],
@@ -609,5 +619,6 @@
         }
     }
 </script>
-</body>
-</html>
+
+
+</body></html>
