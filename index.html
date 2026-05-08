@@ -1,4 +1,6 @@
-<html lang="ar" dir="rtl"><head>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1024">
     <title>مدير الإشارات المرجعية المحمي | Meta Edition</title>
@@ -187,12 +189,11 @@
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); padding: 20px;
             display: flex; flex-direction: column; align-items: center; position: relative;
             transition: transform 0.2s, opacity 0.2s;
-            cursor: grab; /* شكل الماوس عند السحب */
+            cursor: grab;
         }
         .bookmark-item:active { cursor: grabbing; }
         .bookmark-item:hover { transform: translateY(-3px); }
 
-        /* تأثيرات السحب والإفلات */
         .bookmark-item.dragging {
             opacity: 0.5;
             transform: scale(0.95);
@@ -223,7 +224,7 @@
             margin: 15px 0; border: 1px solid var(--border-color); display: flex;
             align-items: center; justify-content: center; background-color: var(--btn-bg);
             font-size: 2rem; color: var(--meta-blue); font-weight: bold;
-            pointer-events: none; /* عشان السحب ميعلقش في الصورة */
+            pointer-events: none;
         }
 
         .bookmark-title { font-weight: 700; margin-bottom: 15px; font-size: 1.1rem; text-align: center; pointer-events: none;}
@@ -233,8 +234,6 @@
             border-radius: 6px; font-weight: 600; box-sizing: border-box; margin-top: auto;
         }
         .bookmark-link:hover { background-color: var(--btn-hover); }
-        
-        :is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}
     </style>
 </head>
 <body class="dark-mode">
@@ -242,7 +241,7 @@
 <div id="loginScreen" style="display: flex;">
     <div class="login-box">
         <h2>تسجيل الدخول</h2>
-        <input type="password" id="passwordInput" placeholder="كلمة المرور..." onkeypress="handleEnter(event)" data-ddg-inputtype="credentials.password.current">
+        <input type="password" id="passwordInput" placeholder="كلمة المرور..." onkeypress="handleEnter(event)">
         <div id="errorMsg" class="error-msg" style="display: none;">كلمة المرور غير صحيحة!</div>
         <button class="submit-btn" onclick="checkPassword()">دخول</button>
     </div>
@@ -269,7 +268,6 @@
 
     <div class="header">
         <h1>MY Bookmarks</h1>
-        
     </div>
 
     <input type="text" id="searchInput" placeholder="🔍 ابحث عن موقع أو فولدر باسمه أو بالرابط..." onkeyup="searchBookmarks()">
@@ -279,7 +277,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>اسم الموقع *</label>
-                    <input type="text" id="siteName" required="" autocomplete="off" data-ddg-inputtype="unknown">
+                    <input type="text" id="siteName" required="" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label>الرابط (URL) *</label>
@@ -289,7 +287,9 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>حفظ في فولدر:</label>
-                    <select id="folderSelect" data-ddg-inputtype="unknown"><option value="root">-- الشاشة الرئيسية --</option><option value="mosikui5j1ti4">📁 KORAAAAA</option><option value="mosikui9q0pm2">📁 ALL</option><option value="mosikuic9liaz">📁 nile engineering</option><option value="mosikuic9fwxc">📁 ai</option><option value="mosikuidzak50">📁 123 demo</option><option value="mosikuid298nf">📁 شطرنج</option><option value="mosikuidcmuk4">📁 مواقع افلام</option><option value="mosikuiex82um">📁 wwe</option><option value="mosikuieudlue">📁 payments</option><option value="mosikuie85x6o">📁 FACEBOOK</option><option value="mosikuifn28hd">📁 Emails</option><option value="mosikuif0f2mo">📁 numbers</option><option value="mosikuifgfem9">📁 GMAIL</option><option value="mosikuifjzxvn">📁 prog</option><option value="mosikuifu7rxt">📁 cccam</option><option value="mosikuif71lxt">📁 youtube download</option><option value="mosikuifhqgzt">📁 اسئلة</option><option value="mosikuigk645d">📁 Bookmarks bar</option><option value="mosikuighy6wv">📁 كورة</option><option value="mosikuiij3t8d">📁 رمضان</option><option value="mosinm776r88f">📁 GITHUB</option></select>
+                    <select id="folderSelect">
+                        <option value="root">-- الشاشة الرئيسية --</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>اللوجو (رابط أو من الجهاز)</label>
@@ -305,320 +305,29 @@
     </div>
 
     <div class="grid-header" id="gridHeader"><div class="breadcrumb">🏠 الشاشة الرئيسية</div></div>
-    <div class="bookmarks-grid" id="bookmarksContainer"><div class="bookmark-item folder-item" draggable="true" data-id="mosikui5j1ti4" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikui5j1ti4', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">KORAAAAA</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikui9q0pm2" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikui9q0pm2', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">ALL</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuic9liaz" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuic9liaz', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">nile engineering</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuic9fwxc" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuic9fwxc', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">ai</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuidzak50" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuidzak50', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">123 demo</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuid298nf" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuid298nf', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">شطرنج</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuidcmuk4" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuidcmuk4', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">مواقع افلام</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuiex82um" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuiex82um', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">wwe</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuieudlue" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuieudlue', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">payments</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuie85x6o" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuie85x6o', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">FACEBOOK</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuifn28hd" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuifn28hd', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">Emails</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuif0f2mo" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuif0f2mo', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">numbers</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuifgfem9" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuifgfem9', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">GMAIL</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuifjzxvn" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuifjzxvn', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">prog</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuifu7rxt" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuifu7rxt', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">cccam</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuif71lxt" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuif71lxt', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">youtube download</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuifhqgzt" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuifhqgzt', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">اسئلة</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuigk645d" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuigk645d', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">Bookmarks bar</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuighy6wv" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuighy6wv', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">كورة</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosikuiij3t8d" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosikuiij3t8d', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">رمضان</div>
-                </div><div class="bookmark-item folder-item" draggable="true" data-id="mosinm776r88f" data-type="folder">
-                    <div class="bookmark-actions">
-                        <button class="action-btn remove" onclick="deleteFolder('mosinm776r88f', event)">حذف</button>
-                    </div>
-                    <div class="bookmark-img" style="background:transparent; border:none; margin-bottom:5px;">📂</div>
-                    <div class="bookmark-title">GITHUB</div>
-                </div><div class="bookmark-item" draggable="true" data-id="mosikui4ebsip" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikui4ebsip')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikui4ebsip')">حذف</button>
-                </div>
-                <div class="bookmark-img">S</div>
-                <div class="bookmark-title">Speedtest by Ookla - The Global Broadband Speed Test</div>
-                <a href="https://www.speedtest.net/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikui46ps70" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikui46ps70')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikui46ps70')">حذف</button>
-                </div>
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFdklEQVRYR8WXa2xURRTH/3dffeyWLW21pQiW2ogUa9vEDxYo4gcTgzaUfkATH4EELFGDGD/gBw1gIhqjkYREUD9ITOojRqnFYDQx3dIikWhbtAiWaB9G+4DS17bddvfe8T9372737t7tFh9hkrNzd+/MnN+cc+bMWQWLbEKICg6tpWyi3JtkWgt/91EaFUXpXMzSSqpBVLydY/ZSylONjXt/nt8PE+T4QvOSAlBxESfKycl2u1geaZXtBOm1mmAJQOXS1FK5d7FaUowbNyAa48clABgmf99ywe/agDOUn+je4SFAyFE2CpfJL4Aop5fWV0OpuicZz454l5gAjJ2fSJjd1Q68dQgYotKgQ9cHwQ8pip1fKOyFjSL7gmWw7X0KStlaK5CthIhaIgpg+FxGrtnsn77GmP4M8LvCi82xjyiXJIoECovgd2F3EsSpD1VqHoBt5+PxENIdFZGYiAXwJQTchy8ArV8CExlUzF3qsgBAxAoRgFUrYXvlJcCdGQ/RQoBNOqT8sPT7N3uAH+mNae7mqgeY4S4DFH8aoNHvqpzK7zbuXFqAz4LPUGy6BZTkyiMwejxEAKTp58/5cBPTyWNAfxaQrtH37AfcVMaocxQDdbuAqmrujGCyTU0BZ7+H1vAJYceA24qT7TzWEucJUKEYGa7DZKPTtwODg1yYu5+iySWAn8931QHb9s0rjjcsQcQXp6BsedDK7FYBWSkBDvDN/ujb0ZPAr9toepo5IIV+HyFEFpU/csxqkX/z20EJYA6+nieB8QYgxHUn6SHZTy0FNncBrv8qL0WZWySAnk6i7WIpMNsXVhyR3KeBNa9b7vSH/iQG4Ko8lNGX8rnQq6Ag25z7EgBEJ48cI1nRz7o8IpSSr4AlDDqLVvlqMgDzvuSo3VyivjolQDqH2qHIDKdpPGIKlFJp/luvDyB2tDQy19m9QaQG0DpcHMtzLJNKxDulF6C4Vv5zAGNm/YawFWJbggu0doeuXKMVVI5U6QNHyddwZm1MCiA42riZ2NNi4fxmtPnnxQF0lUDM9cEvcw5BrmkqMvL3IG/Fm5YAx1ojgWJW2PQzc5fM+jEwyQB8HBUtOkK9O6COfIAAr9lZrj3Ll1dt2SgrvwyHPTtJxJl/ngzw1L4t4JeT9Ra2wnuPAnebPakfwwN8F01EwbFGDF+uwyiVa5w4zL5fcyI3pxZbVn+8KIDDZ6fwTqsC1abCpTKmBO8HRaBrn3Gjzq+iJyJZbJpScUdnEfoDfUgjwDUC9Ip09hlYc9MTeLj4ZXgcTM1J2tELf2L/aT8caho0RYN7zou0oBu1d9pxaHP4mo5plZaX0cSED82/3Icx5oJx0vcIN2Mhk1Zx8zYux86ietyftx5eBy8oozUN/IYjl7rRNjAD18wKOEIZcIYydQC76kTzriwsZyKKaeHLSP5gdR37ep5D819HCeBEn/BigsonKUNqPuPChSDtE9Q88NiXYCzIsxJkmp5dxsWYQwhgD7nhojhnc1BflouDGxPiZ/46NiB87E0VcEN3PT4fasKAyIUqHBjVlhIijxma/hU0MZwIadJRAkJ1QwsQgGbHbCEcM4WMgRAqPLfgzFamd3MzFyQGQBH7hJLsSPez+GjwW0zTBdO6FQhAGJUFiATQuGMhhQCCOxYqawQCgM81havw7royeF2ybow265LMgJDleEJRem6sHc9ffAO/z0xghu4QPKJCFqLcu6bJKkgemTQqz6ArcuARy/HiHVV4ZjXrisRmXZRGxi1Ulp+6cg4nr3SibfQS/giM6ACCQSpdsIQ5Yp23AjX5a/HQzdy1k6VbYlu4LI+BuHF/TGIgZEwcjw9Mq22l+O36/5rFLnjD/pzG7+r/+nv+N+T0M/XlbMt4AAAAAElFTkSuQmCC" alt="Google" class="bookmark-img" onerror="this.outerHTML='&lt;div class=\'bookmark-img\'&gt;G&lt;/div&gt;'">
-                <div class="bookmark-title">Google</div>
-                <a href="https://www.google.com/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikui5ktz64" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikui5ktz64')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikui5ktz64')">حذف</button>
-                </div>
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB0ElEQVRYR+1WPUsDQRB9u0FE/ALBIKKQzkJF/EjAwtpGTSUq/gZBGwt/gIWgIrHWFGJlIUmQNDY2ioVBrLQxWhi0EDQqRvDOt0nOgKRYzZENkoFl9u52Z97N7Mw+AcMiDPtHFUDlRMDGXC1wPAbIAeDTR+0FrEbq+pxGMwcBSw6rqfjZkc/8ZvObxcG5THP6mtcPgCfJ5zNgOCYQyigb2QjYCPTR6T6ndFwWuSGYoMDpubAxWQckr4isoyyuC05ugd4uAgjM8O93y+w8705OEcDQGpOwYAaACBHAYJzOR80AkHEC8F8w/z3aALwtwPgIsB3lNnXYSxJ1CP0pWmrTNuNrB64jQOISmF8FjlhVf5eUSgFrFQ3aNhwAzoa9Q2Bxg6DutE0UFsq0AqAah778BKB2Zj6AdRbS8haQftO3xZXuAHBc3j8CS5tAOKZ9Pv4JgBJTYPoQGi9D443IZCsWB6YvoxXVimdZtDu/6h6uLa6ZdggJG7vV6ZpdPUM5QqLWGqBkdO6ZyFIyB2yOlJ4EGYl+kkgf37dykHxaJKVQwyGlMk9Si/znNylV98sT7bxQq8uBBNUmKbXJBWUC6I4IhN+Vgcqh5Xppc39VNQLGI/AFcHW2n6TJeL4AAAAASUVORK5CYII=" alt="YouTube" class="bookmark-img" onerror="this.outerHTML='&lt;div class=\'bookmark-img\'&gt;Y&lt;/div&gt;'">
-                <div class="bookmark-title">YouTube</div>
-                <a href="https://www.youtube.com/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikui5eplin" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikui5eplin')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikui5eplin')">حذف</button>
-                </div>
-                <div class="bookmark-img">D</div>
-                <div class="bookmark-title">D-Link</div>
-                <a href="http://192.168.1.1/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikui5mk4r2" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikui5mk4r2')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikui5mk4r2')">حذف</button>
-                </div>
-                <div class="bookmark-img">G</div>
-                <div class="bookmark-title">Google Keep</div>
-                <a href="https://keep.google.com/#NOTE/1jJZ_PbbtdvNte2eBzSjheuUJAviuMlxepAOTEV8w5BzmKAbaPn_AEAJL1zG5pMXm0Bpm" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikui5lo7bz" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikui5lo7bz')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikui5lo7bz')">حذف</button>
-                </div>
-                <div class="bookmark-img">V</div>
-                <div class="bookmark-title">VIA Sports TV - VIP</div>
-                <a href="https://omarsalam22142214-ops.github.io/My-Tv/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuibzhnvu" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuibzhnvu')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuibzhnvu')">حذف</button>
-                </div>
-                <div class="bookmark-img">O</div>
-                <div class="bookmark-title">OMAR TV</div>
-                <a href="https://omarsalam22142214-ops.github.io/OMAR-TV/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuicx2xr0" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuicx2xr0')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuicx2xr0')">حذف</button>
-                </div>
-                <div class="bookmark-img">S</div>
-                <div class="bookmark-title">Sport Only TV</div>
-                <a href="https://omarsalam22142214-ops.github.io/SPORTONLY/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuicpuve5" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuicpuve5')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuicpuve5')">حذف</button>
-                </div>
-                <div class="bookmark-img">O</div>
-                <div class="bookmark-title">OMAR TV 2 Edition</div>
-                <a href="https://omarsalam22142214-ops.github.io/OMAR-TV-2/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuicq7qix" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuicq7qix')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuicq7qix')">حذف</button>
-                </div>
-                <div class="bookmark-img">L</div>
-                <div class="bookmark-title">Login</div>
-                <a href="https://my.te.eg/user/login" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijve19c" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijve19c')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijve19c')">حذف</button>
-                </div>
-                <div class="bookmark-img">M</div>
-                <div class="bookmark-title">My-Tv/index.html at main · omarsalam22142214-ops/My-Tv</div>
-                <a href="https://github.com/omarsalam22142214-ops/My-Tv/blob/main/index.html" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuij46shl" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuij46shl')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuij46shl')">حذف</button>
-                </div>
-                <div class="bookmark-img">م</div>
-                <div class="bookmark-title">مشغل البث المباشر</div>
-                <a href="https://omarsalam22142214-ops.github.io/CH-1/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijhtf2f" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijhtf2f')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijhtf2f')">حذف</button>
-                </div>
-                <div class="bookmark-img">أ</div>
-                <div class="bookmark-title">أقوى مستخرج روابط فيديو وبث مباشر</div>
-                <a href="https://omarsalam22142214-ops.github.io/ifrrames.-fetchhessS/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijhsoiv" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijhsoiv')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijhsoiv')">حذف</button>
-                </div>
-                <div class="bookmark-img">S</div>
-                <div class="bookmark-title">SPORTONLY/index.html at main · omarsalam22142214-ops/SPORTONLY</div>
-                <a href="https://github.com/omarsalam22142214-ops/SPORTONLY/blob/main/index.html" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijry1wf" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijry1wf')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijry1wf')">حذف</button>
-                </div>
-                <div class="bookmark-img">C</div>
-                <div class="bookmark-title">CH-1/index.html at main · omarsalam22142214-ops/CH-1</div>
-                <a href="https://github.com/omarsalam22142214-ops/CH-1/blob/main/index.html" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijxcdip" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijxcdip')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijxcdip')">حذف</button>
-                </div>
-                <div class="bookmark-img">O</div>
-                <div class="bookmark-title">omarsalam22142214-ops/CH-2: CH 2</div>
-                <a href="https://github.com/omarsalam22142214-ops/CH-2/blob/main/index.html" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuij2g0tb" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuij2g0tb')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuij2g0tb')">حذف</button>
-                </div>
-                <div class="bookmark-img">C</div>
-                <div class="bookmark-title">CH-3/index.html at main · omarsalam22142214-ops/CH-3</div>
-                <a href="https://github.com/omarsalam22142214-ops/CH-3/blob/main/index.html" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijkqxsc" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijkqxsc')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijkqxsc')">حذف</button>
-                </div>
-                <div class="bookmark-img">C</div>
-                <div class="bookmark-title">CH-4/index.html at main · omarsalam22142214-ops/CH-4</div>
-                <a href="https://github.com/omarsalam22142214-ops/CH-4/blob/main/index.html" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijak0j0" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijak0j0')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijak0j0')">حذف</button>
-                </div>
-                <div class="bookmark-img">C</div>
-                <div class="bookmark-title">CH-5/index.html at main · omarsalam22142214-ops/CH-5</div>
-                <a href="https://github.com/omarsalam22142214-ops/CH-5/blob/main/index.html" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijcpzz6" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijcpzz6')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijcpzz6')">حذف</button>
-                </div>
-                <div class="bookmark-img">H</div>
-                <div class="bookmark-title">https://omarsalam22142214-ops.github.io/topics17/</div>
-                <a href="https://omarsalam22142214-ops.github.io/topics17/" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijm5oe5" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijm5oe5')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijm5oe5')">حذف</button>
-                </div>
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNiAwQzcuMTYgMCAwIDcuMTYgMCAxNkMwIDIzLjA4IDQuNTggMjkuMDYgMTAuOTQgMzEuMThDMTEuNzQgMzEuMzIgMTIuMDQgMzAuODQgMTIuMDQgMzAuNDJDMTIuMDQgMzAuMDQgMTIuMDIgMjguNzggMTIuMDIgMjcuNDRDOCAyOC4xOCA2Ljk2IDI2LjQ2IDYuNjQgMjUuNTZDNi40NiAyNS4xIDUuNjggMjMuNjggNSAyMy4zQzQuNDQgMjMgMy42NCAyMi4yNiA0Ljk4IDIyLjI0QzYuMjQgMjIuMjIgNy4xNCAyMy40IDcuNDQgMjMuODhDOC44OCAyNi4zIDExLjE4IDI1LjYyIDEyLjEgMjUuMkMxMi4yNCAyNC4xNiAxMi42NiAyMy40NiAxMy4xMiAyMy4wNkM5LjU2IDIyLjY2IDUuODQgMjEuMjggNS44NCAxNS4xNkM1Ljg0IDEzLjQyIDYuNDYgMTEuOTggNy40OCAxMC44NkM3LjMyIDEwLjQ2IDYuNzYgOC44MiA3LjY0IDYuNjJDNy42NCA2LjYyIDguOTggNi4yIDEyLjA0IDguMjZDMTMuMzIgNy45IDE0LjY4IDcuNzIgMTYuMDQgNy43MkMxNy40IDcuNzIgMTguNzYgNy45IDIwLjA0IDguMjZDMjMuMSA2LjE4IDI0LjQ0IDYuNjIgMjQuNDQgNi42MkMyNS4zMiA4LjgyIDI0Ljc2IDEwLjQ2IDI0LjYgMTAuODZDMjUuNjIgMTEuOTggMjYuMjQgMTMuNCAyNi4yNCAxNS4xNkMyNi4yNCAyMS4zIDIyLjUgMjIuNjYgMTguOTQgMjMuMDZDMTkuNTIgMjMuNTYgMjAuMDIgMjQuNTIgMjAuMDIgMjYuMDJDMjAuMDIgMjguMTYgMjAgMjkuODggMjAgMzAuNDJDMjAgMzAuODQgMjAuMyAzMS4zNCAyMS4xIDMxLjE4QzI3LjQyIDI5LjA2IDMyIDIzLjA2IDMyIDE2QzMyIDcuMTYgMjQuODQgMCAxNiAwVjBaIiBmaWxsPSIjMjQyOTJFIi8+Cjwvc3ZnPgo=" alt="Your Repositories" class="bookmark-img" onerror="this.outerHTML='&lt;div class=\'bookmark-img\'&gt;Y&lt;/div&gt;'">
-                <div class="bookmark-title">Your Repositories</div>
-                <a href="https://github.com/omarsalam22142214-ops?tab=repositories" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuijpvfl5" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuijpvfl5')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuijpvfl5')">حذف</button>
-                </div>
-                <div class="bookmark-img">U</div>
-                <div class="bookmark-title">Upload Media ‹ Site Title — WordPress</div>
-                <a href="https://omarsalam22.wordpress.com/wp-admin/media-new.php" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div><div class="bookmark-item" draggable="true" data-id="mosikuij66ewb" data-type="bookmark">
-                <div class="bookmark-actions">
-                    <button class="action-btn edit" onclick="editBookmark('mosikuij66ewb')">تعديل</button>
-                    <button class="action-btn remove" onclick="deleteBookmark('mosikuij66ewb')">حذف</button>
-                </div>
-                <div class="bookmark-img">O</div>
-                <div class="bookmark-title">omarsalam22142214-ops/test-new: tesstt</div>
-                <a href="https://github.com/omarsalam22142214-ops/test-new" target="_blank" class="bookmark-link">زيارة الموقع</a>
-            </div></div>
+    <!-- سيتم تفريغ هذا العنصر ديناميكياً بناءً على الداتا المسجلة -->
+    <div class="bookmarks-grid" id="bookmarksContainer"></div>
 </div>
 
+<!-- استدعاء مكاتب فايربيس -->
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js"></script>
+
 <script>
+    // 1. إعدادات فايربيس بتاعتك
+    const firebaseConfig = {
+        apiKey: "AIzaSyBtIkF-UhkeFa-cxutgJAQpR7K_IjKxloc",
+        authDomain: "spygame-337ee.firebaseapp.com",
+        databaseURL: "https://spygame-337ee-default-rtdb.firebaseio.com", 
+        projectId: "spygame-337ee",
+        storageBucket: "spygame-337ee.firebasestorage.app"
+    };
+
+    // 2. تشغيل فايربيس والاتصال بقاعدة البيانات
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // 3. المتغيرات الأساسية
     let appState = {
         folders: [],
         bookmarks: [],
@@ -627,26 +336,14 @@
     };
 
     let uploadedFileBase64 = "";
-    let draggedItemInfo = null; // متغير لحفظ العنصر اللي بيتم سحبه
+    let draggedItemInfo = null;
+
+    const MASTER_PASSWORD = "#ZMsd42d*";
+    let currentSessionPassword = ""; 
+    let isMasterSession = false;
 
     function generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    }
-
-    function initData() {
-        const savedData = localStorage.getItem('meta_app_data');
-        if (savedData) {
-            const parsed = JSON.parse(savedData);
-            appState.folders = parsed.folders || [];
-            appState.bookmarks = parsed.bookmarks || [];
-        }
-    }
-
-    function saveData() {
-        localStorage.setItem('meta_app_data', JSON.stringify({
-            folders: appState.folders,
-            bookmarks: appState.bookmarks
-        }));
     }
 
     if (localStorage.getItem('theme') === 'dark') {
@@ -667,29 +364,108 @@
         }
     }
 
-    const correctPassword = "#ZMsd42d*";
-    
-    function checkPassword() {
+    // 4. دالة الدخول (بتحدد إنت الماستر ولا زائر)
+    async function checkPassword() {
         const input = document.getElementById('passwordInput').value;
-        if (input === correctPassword) {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'flex';
-            document.getElementById('errorMsg').style.display = 'none';
-            initData();
-            renderApp(); 
-        } else {
-            document.getElementById('errorMsg').style.display = 'block';
+        const errorMsg = document.getElementById('errorMsg');
+        const submitBtnUI = document.querySelector('.login-box .submit-btn');
+        
+        if (!input.trim()) {
+            errorMsg.innerText = "اكتب كلمة المرور أولاً!";
+            errorMsg.style.display = 'block';
+            return;
         }
+
+        submitBtnUI.innerText = "جاري التحميل...";
+        submitBtnUI.disabled = true;
+
+        currentSessionPassword = input;
+
+        if (input === MASTER_PASSWORD) {
+            isMasterSession = true;
+            await loadMasterDataFromFirebase();
+        } else {
+            isMasterSession = false;
+            loadLocalGuestData(input);
+        }
+        
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('appContainer').style.display = 'flex';
+        errorMsg.style.display = 'none';
+        
+        submitBtnUI.innerText = "دخول";
+        submitBtnUI.disabled = false;
+        
+        renderApp(); 
     }
-    
+
     function handleEnter(e) { if (e.key === 'Enter') checkPassword(); }
 
     function logoutApp() {
+        // تفريغ الداتا عشان متظهرش لحد تاني
+        appState.folders = [];
+        appState.bookmarks = [];
+        appState.currentFolderId = 'root';
+        currentSessionPassword = "";
+        isMasterSession = false;
+
         document.getElementById('appContainer').style.display = 'none';
         document.getElementById('loginScreen').style.display = 'flex';
         document.getElementById('passwordInput').value = ''; 
-        appState.currentFolderId = 'root'; 
         document.getElementById('searchInput').value = ''; 
+        document.getElementById('bookmarksContainer').innerHTML = '';
+    }
+
+    // 5. جلب بيانات الماستر من فايربيس
+    async function loadMasterDataFromFirebase() {
+        try {
+            const snapshot = await database.ref('masterData').once('value');
+            const data = snapshot.val();
+            
+            if (data) {
+                appState.folders = data.folders || [];
+                appState.bookmarks = data.bookmarks || [];
+            } else {
+                appState.folders = [];
+                appState.bookmarks = [];
+            }
+        } catch (error) {
+            console.error("فشل في جلب البيانات من فايربيس:", error);
+            loadLocalGuestData('MASTER_LOCAL_BACKUP');
+        }
+    }
+
+    // 6. تحميل بيانات الزوار (من التخزين المحلي للجهاز فقط)
+    function loadLocalGuestData(password) {
+        const savedData = localStorage.getItem('meta_app_data_' + password);
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            appState.folders = parsed.folders || [];
+            appState.bookmarks = parsed.bookmarks || [];
+        } else {
+            appState.folders = [];
+            appState.bookmarks = [];
+        }
+    }
+
+    // 7. دالة الحفظ المحدثة (بتحفظ في فايربيس للماستر، وفي الجهاز للزوار)
+    async function saveData() {
+        const dataToSave = {
+            folders: appState.folders,
+            bookmarks: appState.bookmarks
+        };
+
+        if (isMasterSession) {
+            try {
+                await database.ref('masterData').set(dataToSave);
+                localStorage.setItem('meta_app_data_MASTER_LOCAL_BACKUP', JSON.stringify(dataToSave));
+            } catch (error) {
+                console.error("خطأ في رفع البيانات لفايربيس:", error);
+                alert("حصل مشكلة في حفظ البيانات على السيرفر، اتأكد من النت!");
+            }
+        } else {
+            localStorage.setItem('meta_app_data_' + currentSessionPassword, JSON.stringify(dataToSave));
+        }
     }
 
     function createNewFolder() {
@@ -742,7 +518,7 @@
         });
     }
 
-    // ---------------- دوال السحب والإفلات ---------------- //
+    // دوال السحب والإفلات
     function handleDragStart(e) {
         draggedItemInfo = {
             id: e.currentTarget.dataset.id,
@@ -780,7 +556,6 @@
 
         if (draggedItemInfo.id === targetId) return; 
 
-        // 1. نقل موقع لداخل فولدر
         if (draggedItemInfo.type === 'bookmark' && targetType === 'folder') {
             const bIndex = appState.bookmarks.findIndex(b => b.id === draggedItemInfo.id);
             if (bIndex !== -1) {
@@ -791,7 +566,6 @@
             return;
         }
 
-        // 2. إعادة ترتيب المواقع أو الفولدرات (تبديل أماكن)
         if (draggedItemInfo.type === targetType) {
             let list = draggedItemInfo.type === 'folder' ? appState.folders : appState.bookmarks;
             const draggedIndex = list.findIndex(item => item.id === draggedItemInfo.id);
@@ -810,7 +584,6 @@
         e.currentTarget.classList.remove('dragging');
         draggedItemInfo = null;
     }
-    // ---------------------------------------------------- //
 
     function renderApp() {
         document.getElementById('searchInput').value = '';
@@ -839,7 +612,6 @@
                 div.dataset.id = f.id;
                 div.dataset.type = 'folder';
                 
-                // ربط أحداث السحب
                 div.ondragstart = handleDragStart;
                 div.ondragover = handleDragOver;
                 div.ondragleave = handleDragLeave;
@@ -879,7 +651,6 @@
             bookmarkEl.dataset.id = b.id;
             bookmarkEl.dataset.type = 'bookmark';
             
-            // ربط أحداث السحب
             bookmarkEl.ondragstart = handleDragStart;
             bookmarkEl.ondragover = handleDragOver;
             bookmarkEl.ondragleave = handleDragLeave;
@@ -1134,5 +905,5 @@
     }
 </script>
 
-
-</body></html>
+</body>
+</html>
